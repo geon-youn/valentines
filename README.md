@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-# valentines
-Will you be my valentines? 🥺
-=======
-# React + Vite
+# Will you be my valentines? 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small React app inspired by [this reel](https://www.instagram.com/p/C228ru7yHFm/) on Instagram.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
->>>>>>> fa076b2 (initial commit)
+Also just to practice using Less.js for work.
