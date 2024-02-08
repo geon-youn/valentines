@@ -35,8 +35,7 @@ function App() {
                                 }}
                                 onClick={() => setAccepted(true)}>
                                 Yes
-                            </button>
-                            <button
+                            </button> <button
                                 className={styles.no}
                                 onClick={() => setNoCount(noCount => noCount + 1)}>
                                 {noList[Math.min(noCount, noList.length - 1)]}
@@ -50,6 +49,9 @@ function App() {
                         </h1>
                     </>}
             </div>
+            <footer className={styles.footer}>
+                made with ❤️ by <a href="https://geon-youn.github.io/" target="_blank" rel="noopener">Geon</a>
+            </footer>
         </>
     )
 }
