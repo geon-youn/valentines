@@ -50,7 +50,7 @@ function App() {
                     </>}
             </div>
             <footer className={styles.footer}>
-                made with ❤️ by <a href="https://geon-youn.github.io/" target="_blank" rel="noopener">Geon</a>
+                made with ❤️ by <a href="https://geon-youn.github.io/" target="_blank" rel="noopener">Geon</a> | code hosted on <a href="https://github.com/geon-youn/valentines/" target="_blank" rel="noopener">GitHub</a>
             </footer>
         </>
     )
