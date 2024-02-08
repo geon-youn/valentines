@@ -23,7 +23,7 @@ function App() {
             <div className={styles.main}>
                 {!accepted ?
                     <>
-                        <img src="/jump.gif"></img>
+                        <img src="public/jump.gif"></img>
                         <h1 className={styles.title}>
                             Will you be my Valentine?
                         </h1>
@@ -44,7 +44,7 @@ function App() {
                         </div>
                     </> :
                     <>
-                        <img src="/accept.gif" />
+                        <img src="public/accept.gif" />
                         <h1 className={styles.title} style={{ fontWeight: 'bold' }}>
                             Ok yay!!!
                         </h1>
