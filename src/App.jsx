@@ -31,13 +31,14 @@ function App() {
                             <button
                                 className={styles.yes}
                                 style={{
-                                    fontSize: `${Math.min(noCount + 1, noList.length - 1)}rem`
+                                    fontSize: `${(noCount + 2) / 2}rem`,
                                 }}
                                 onClick={() => setAccepted(true)}>
                                 Yes
-                            </button> <button
+                            </button>
+                            <button
                                 className={styles.no}
-                                onClick={() => setNoCount(noCount => noCount + 1)}>
+                                onClick={() => setNoCount(noCount => Math.min(noCount + 1, noList.length - 1))}>
                                 {noList[Math.min(noCount, noList.length - 1)]}
                             </button>
                         </div>
