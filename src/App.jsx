@@ -1,5 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, createRef } from 'react';
 import styles from './styles/app.module.less';
+
+// No button reference
+const noRef = createRef();
 
 function App() {
     // Each time the guy says no, increment it by 1
@@ -17,6 +20,23 @@ function App() {
         "Wouldn't you reconsider?", 'Is that your final answer?',
         "You're breaking my heart ;("
     ], []);
+
+    // Mouse location
+    const [mousePos, setMousePos] = useState({});
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            setMousePos({
+                x: e.clientX,
+                y: e.clientY,
+            });
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        }
+    });
 
     return (
         <>
@@ -37,6 +57,7 @@ function App() {
                                 Yes
                             </button>
                             <button
+                                ref={noRef}
                                 className={styles.no}
                                 onClick={() => setNoCount(noCount => Math.min(noCount + 1, noList.length - 1))}>
                                 {noList[Math.min(noCount, noList.length - 1)]}
