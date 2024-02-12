@@ -18,6 +18,17 @@ function App() {
         "You're breaking my heart ;("
     ], []);
 
+    // Change button styles randomly
+    const switchStyles =
+        // Already said no and not at the last no text
+        noCount > 0 && noCount < noList.length - 1
+            // Randomly change styles
+            ? Math.random() < 1/3
+                ? true
+                : false
+            : false;
+    const increaseSize = { fontSize: `${(noCount + 2) / 2}rem` }
+
     return (
         <>
             <div className={styles.main}>
@@ -29,16 +40,15 @@ function App() {
                         </h1>
                         <div className={styles.buttons}>
                             <button
-                                className={styles.yes}
-                                style={{
-                                    fontSize: `${Math.min(noCount + 1, noList.length - 1)}rem`
-                                }}
+                                className={switchStyles ? styles.no : styles.yes}
+                                style={switchStyles ? null : increaseSize}
                                 onClick={() => setAccepted(true)}>
                                 Yes
                             </button> <button
-                                className={styles.no}
-                                onClick={() => setNoCount(noCount => noCount + 1)}>
-                                {noList[Math.min(noCount, noList.length - 1)]}
+                                className={switchStyles ? styles.yes : styles.no}
+                                style={switchStyles ? increaseSize : null}
+                                onClick={() => setNoCount(noCount => Math.min(noCount + 1, noList.length - 1))}>
+                                {noList[noCount]}
                             </button>
                         </div>
                     </> :
