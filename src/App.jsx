@@ -21,7 +21,7 @@ function App() {
         "You're breaking my heart ;("
     ], []);
 
-    // Mouse location
+    // Get mouse position
     const [mousePos, setMousePos] = useState({});
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -29,6 +29,7 @@ function App() {
                 x: e.clientX,
                 y: e.clientY,
             });
+
         };
 
         window.addEventListener('mousemove', handleMouseMove);
@@ -37,6 +38,51 @@ function App() {
             window.removeEventListener('mousemove', handleMouseMove);
         }
     });
+
+    // Get no button's position
+    let noPos;
+    if (noRef && noRef.current) {
+        const noRect = noRef.current.getBoundingClientRect();
+        const x = noRect.x + noRect.width / 2;
+        const y = noRect.y + noRect.height / 2;
+        noPos = { x, y };
+    }
+
+    // Parallax for no button
+    const noMove = () => {
+        // If noPos isn't set yet, then do nothing
+        if (!noPos) {
+            return;
+        }
+
+        // If the user's mouse is far away, then do nothing
+        const dist = Math.sqrt(Math.pow(mousePos.x - noPos.x, 2) + Math.pow(mousePos.y - noPos.y, 2));
+        if (dist > 50 * noCount) {
+            return;
+        }
+
+        // If they haven't pressed no yet, then do nothing
+        if (noCount === 0) {
+            return;
+        }
+
+        const amount = 5 * noCount;
+        const pos = `${amount}%`;
+        const neg = '-' + pos;
+        const translateX = mousePos.x - noPos.x < -40
+            ? pos
+            : mousePos.x - noPos.x > 40
+                ? neg
+                : '0';
+        const translateY = mousePos.y - noPos.y < -10
+            ? pos
+            : mousePos.y - noPos.y > 10
+                ? neg
+                : '0';
+        return {
+            transform: `translate(${translateX}, ${translateY})`,
+        }
+    }
 
     return (
         <>
@@ -59,6 +105,7 @@ function App() {
                             <button
                                 ref={noRef}
                                 className={styles.no}
+                                style={noMove()}
                                 onClick={() => setNoCount(noCount => Math.min(noCount + 1, noList.length - 1))}>
                                 {noList[Math.min(noCount, noList.length - 1)]}
                             </button>
