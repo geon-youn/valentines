@@ -29,59 +29,73 @@ function App() {
                 x: e.clientX,
                 y: e.clientY,
             });
-
         };
-
-        window.addEventListener('mousemove', handleMouseMove);
-
+        addEventListener('mousemove', handleMouseMove);
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
+            removeEventListener('mousemove', handleMouseMove);
         }
     });
 
-    // Get no button's position
-    let noPos;
-    if (noRef && noRef.current) {
-        const noRect = noRef.current.getBoundingClientRect();
-        const x = noRect.x + noRect.width / 2;
-        const y = noRect.y + noRect.height / 2;
-        noPos = { x, y };
-    }
-
-    // Parallax for no button
+    // Moving the no button 
+    const [noTranslate, setNoTranslate] = useState({ x: 0, y: 0 });
     const noMove = () => {
-        // If noPos isn't set yet, then do nothing
-        if (!noPos) {
-            return;
-        }
-
-        // If the user's mouse is far away, then do nothing
-        const dist = Math.sqrt(Math.pow(mousePos.x - noPos.x, 2) + Math.pow(mousePos.y - noPos.y, 2));
-        if (dist > 50 * noCount) {
-            return;
-        }
-
         // If they haven't pressed no yet, then do nothing
         if (noCount === 0) {
             return;
         }
 
-        const amount = 5 * noCount;
-        const pos = `${amount}%`;
-        const neg = '-' + pos;
-        const translateX = mousePos.x - noPos.x < -40
-            ? pos
-            : mousePos.x - noPos.x > 40
-                ? neg
-                : '0';
-        const translateY = mousePos.y - noPos.y < -10
-            ? pos
-            : mousePos.y - noPos.y > 10
-                ? neg
-                : '0';
-        return {
-            transform: `translate(${translateX}, ${translateY})`,
+        // Get no button's position
+        if (!noRef || !noRef.current) {
+            return;
         }
+        let noRect = noRef.current.getBoundingClientRect();
+        noRect.x = noRect.x + noRect.width / 2;
+        noRect.y = noRect.y + noRect.height / 2;
+
+        // If the user's mouse is far away, then move closer to initial spot
+        if ((Math.abs(mousePos.x - noRect.x) > noRect.width * 2) ||
+            (Math.abs(mousePos.y - noRect.y) > noRect.height * 2)) {
+            setNoTranslate(() => {
+                return {
+                    x: noTranslate.x * 0.99,
+                    y: noTranslate.y * 0.99
+                }
+            });
+            return;
+        }
+
+        // Move based on how close the cursor is
+        let dx = mousePos.x - noRect.x;
+        const px = dx > 0; 
+        dx = Math.abs(dx);
+        let dy = mousePos.y - noRect.y;
+        const py = dy > 0;
+        dy = Math.abs(dy);
+        const f = (dv, pv) => {
+            return (pv ? -1 : 1) * noCount ** 2 / Math.max(dv, 0.8);
+        }
+        dx = f(dx, px);
+        dy = f(dy, py);
+        setNoTranslate(() => {
+            return {
+                x: noTranslate.x + dx,
+                y: noTranslate.y + dy
+            }
+        });
+    }
+
+    useEffect(() => {
+        const key = setInterval(() => {
+            noMove();
+        }, 5);
+
+        return () => {
+            clearInterval(key);
+        }
+    });
+
+    const getTranslate = () => {
+        return `translate(${noTranslate.x}px, ${noTranslate.y}px)`;
     }
 
     return (
@@ -105,8 +119,11 @@ function App() {
                             <button
                                 ref={noRef}
                                 className={styles.no}
-                                style={noMove()}
-                                onClick={() => setNoCount(noCount => Math.min(noCount + 1, noList.length - 1))}>
+                                style={{ transform: getTranslate() }}
+                                onClick={() => {
+                                    setNoCount(noCount =>
+                                        Math.min(noCount + 1, noList.length - 1))
+                                }}>
                                 {noList[Math.min(noCount, noList.length - 1)]}
                             </button>
                         </div>
